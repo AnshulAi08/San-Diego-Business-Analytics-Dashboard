@@ -1,0 +1,196 @@
+
+<h2 class="sr-only">StayCatin.com San Diego Business Analytics Dashboard — 11,922 listings, avg price $213, avg rating 95.3, 89% occupancy</h2>
+
+<style>
+  .sc-wrap { font-family: var(--font-sans); padding: 0 0 2rem; }
+  .sc-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .sc-header h1 { font-size: 20px; font-weight: 500; margin: 0; color: var(--color-text-primary); }
+  .sc-header span { font-size: 13px; color: var(--color-text-secondary); }
+  .sc-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .kpi { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px 16px; }
+  .kpi-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+  .kpi-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .kpi-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 3px; }
+  .sc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .sc-row-3 { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; margin-bottom: 12px; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 16px; }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; font-size: 11px; color: var(--color-text-secondary); }
+  .leg-dot { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+  .tab-btns { display: flex; gap: 6px; margin-bottom: 10px; }
+  .tab-btn { font-size: 12px; padding: 4px 10px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .tab-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+  .insight-box { background: var(--color-background-success); border-left: 3px solid var(--color-border-success); border-radius: 0; padding: 10px 14px; margin-top: 12px; }
+  .insight-box p { font-size: 13px; color: var(--color-text-success); margin: 0; }
+</style>
+
+<div class="sc-wrap">
+  <div class="sc-header">
+    <h1><i class="ti ti-home-2" aria-hidden="true" style="font-size:20px; vertical-align:-2px; margin-right:4px;"></i>StayCatin.com — San Diego</h1>
+    <span>Business Analytics Dashboard · Data snapshot: Nov 2018 – Nov 2019</span>
+  </div>
+
+  <div class="sc-kpis">
+    <div class="kpi">
+      <div class="kpi-label"><i class="ti ti-building" aria-hidden="true" style="font-size:14px;"></i> Total listings</div>
+      <div class="kpi-value">11,922</div>
+      <div class="kpi-sub">Across San Diego metro</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i class="ti ti-currency-dollar" aria-hidden="true" style="font-size:14px;"></i> Avg nightly price</div>
+      <div class="kpi-value">$213</div>
+      <div class="kpi-sub">Median: $130 · Max: $10K</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i class="ti ti-star" aria-hidden="true" style="font-size:14px;"></i> Avg review rating</div>
+      <div class="kpi-value">95.3</div>
+      <div class="kpi-sub">Out of 100 · 151K reviews</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><i class="ti ti-calendar-check" aria-hidden="true" style="font-size:14px;"></i> Avg occupancy rate</div>
+      <div class="kpi-value">89%</div>
+      <div class="kpi-sub">Based on availability data</div>
+    </div>
+  </div>
+
+  <div class="sc-row">
+    <div class="card">
+      <p class="card-title">Monthly avg price & availability</p>
+      <div class="legend">
+        <span><span class="leg-dot" style="background:#378ADD;"></span> Avg nightly price ($)</span>
+        <span><span class="leg-dot" style="background:#1D9E75;border-radius:50%;"></span> Available nights</span>
+      </div>
+      <div style="position:relative;height:200px;"><canvas id="priceChart" role="img" aria-label="Line chart showing monthly average price peaking in July 2019 at $335 and available nights staying around 13,000-16,000 per month">Monthly price and availability trend data.</canvas></div>
+    </div>
+    <div class="card">
+      <p class="card-title">Room type breakdown</p>
+      <div class="legend" id="rtLegend"></div>
+      <div style="position:relative;height:200px;"><canvas id="roomChart" role="img" aria-label="Donut chart: Entire home/apt 70%, Private room 29%, Shared room 2%">Room type distribution across 11,922 listings.</canvas></div>
+    </div>
+  </div>
+
+  <div class="sc-row">
+    <div class="card">
+      <p class="card-title">Top 10 neighbourhoods by listings</p>
+      <div style="position:relative;height:320px;"><canvas id="neighbourhoodChart" role="img" aria-label="Horizontal bar chart of top 10 neighbourhoods. Pacific Beach leads with 1,264 listings.">Neighbourhood listing counts from Pacific Beach (1264) to Golden Hill (254).</canvas></div>
+    </div>
+    <div class="card">
+      <p class="card-title">Avg price by neighbourhood (top 10)</p>
+      <div style="position:relative;height:320px;"><canvas id="priceNeighChart" role="img" aria-label="Horizontal bar of avg price by neighbourhood. Torrey Preserve $500, Torrey Pines $471, La Jolla $445.">Neighbourhood price comparison.</canvas></div>
+    </div>
+  </div>
+
+  <div class="sc-row">
+    <div class="card">
+      <p class="card-title">Property type distribution (top 8)</p>
+      <div class="legend" id="propLegend"></div>
+      <div style="position:relative;height:200px;"><canvas id="propChart" role="img" aria-label="Bar chart of property types: House 4159, Apartment 3333, Condominium 1671 leading.">Property type counts.</canvas></div>
+    </div>
+    <div class="card">
+      <p class="card-title">Avg price by room type</p>
+      <div style="position:relative;height:200px;"><canvas id="roomPriceChart" role="img" aria-label="Bar chart: Entire home/apt $265, Private room $93, Shared room $75.">Average nightly price by room type.</canvas></div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <p><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Key insight:</strong> Prices spike sharply in summer (Jul +$335/night vs Jan $230/night). La Jolla and Mission Beach command 2–3× the platform average price. Entire home/apt listings generate 3× the revenue per booking vs private rooms. 89% occupancy signals a supply-constrained, high-demand market.</p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const months = ['Nov 18','Dec 18','Jan 19','Feb 19','Mar 19','Apr 19','May 19','Jun 19','Jul 19','Aug 19','Sep 19','Oct 19','Nov 19'];
+const prices = [246,239,230,225,241,238,257,294,335,318,286,285,268];
+const avails = [5219,13327,15707,13696,15620,16001,15525,13185,13122,13607,13117,13642,6212];
+
+const gridColor = 'rgba(128,128,128,0.1)';
+const tickColor = '#888';
+
+new Chart(document.getElementById('priceChart'), {
+  data: {
+    labels: months,
+    datasets: [
+      { type:'line', label:'Avg price ($)', data: prices, borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.08)', borderWidth:2, pointRadius:3, pointBackgroundColor:'#378ADD', yAxisID:'y', fill:true, tension:0.35 },
+      { type:'bar', label:'Available nights', data: avails, backgroundColor:'rgba(29,158,117,0.3)', borderColor:'#1D9E75', borderWidth:1, yAxisID:'y2' }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false } },
+    scales:{
+      x:{ ticks:{ color:tickColor, font:{size:10}, maxRotation:45, autoSkip:false }, grid:{ color:gridColor } },
+      y:{ position:'left', ticks:{ color:tickColor, font:{size:10}, callback:v=>'$'+v }, grid:{ color:gridColor } },
+      y2:{ position:'right', ticks:{ color:tickColor, font:{size:10}, callback:v=>(v/1000).toFixed(0)+'K' }, grid:{ drawOnChartArea:false } }
+    }
+  }
+});
+
+const rtColors = ['#378ADD','#1D9E75','#EF9F27'];
+const rtData = { labels:['Entire home/apt','Private room','Shared room'], data:[8304,3426,192] };
+new Chart(document.getElementById('roomChart'), {
+  type:'doughnut',
+  data:{ labels:rtData.labels, datasets:[{ data:rtData.data, backgroundColor:rtColors, borderWidth:2, borderColor:'transparent', hoverOffset:4 }] },
+  options:{ responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:{ legend:{ display:false } } }
+});
+const leg1 = document.getElementById('rtLegend');
+rtData.labels.forEach((l,i) => {
+  const pct = Math.round(rtData.data[i]/11922*100);
+  leg1.innerHTML += `<span style="display:flex;align-items:center;gap:4px;"><span style="width:9px;height:9px;border-radius:2px;background:${rtColors[i]};display:inline-block;"></span>${l} ${pct}%</span>`;
+});
+
+const nbLabels = ['Pacific Beach','Mission Beach','La Jolla','East Village','North Park','Ocean Beach','Park West','Hillcrest','University City','Golden Hill'];
+const nbData = [1264,1098,804,682,623,483,378,338,270,254];
+new Chart(document.getElementById('neighbourhoodChart'), {
+  type:'bar',
+  data:{ labels:nbLabels, datasets:[{ data:nbData, backgroundColor:'rgba(55,138,221,0.7)', borderColor:'#378ADD', borderWidth:1, borderRadius:3 }] },
+  options:{
+    responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    plugins:{ legend:{display:false} },
+    scales:{ x:{ ticks:{color:tickColor,font:{size:10}}, grid:{color:gridColor} }, y:{ ticks:{color:tickColor,font:{size:10}}, grid:{color:'transparent'} } }
+  }
+});
+
+const pnLabels = ['Torrey Preserve','Torrey Pines','La Jolla','Sunset Cliffs','Loma Portal','Mission Beach','Horton Plaza','Black Mtn Ranch','Del Mar Heights','Marina'];
+const pnData = [500,471,445,426,374,368,353,334,331,306];
+new Chart(document.getElementById('priceNeighChart'), {
+  type:'bar',
+  data:{ labels:pnLabels, datasets:[{ data:pnData, backgroundColor:'rgba(29,158,117,0.7)', borderColor:'#1D9E75', borderWidth:1, borderRadius:3 }] },
+  options:{
+    responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    plugins:{ legend:{display:false} },
+    scales:{
+      x:{ ticks:{color:tickColor,font:{size:10},callback:v=>'$'+v}, grid:{color:gridColor} },
+      y:{ ticks:{color:tickColor,font:{size:10}}, grid:{color:'transparent'} }
+    }
+  }
+});
+
+const ptColors = ['#378ADD','#1D9E75','#EF9F27','#D85A30','#7F77DD','#3C3489','#1D9E75','#D4537E'];
+const ptLabels = ['House','Apartment','Condominium','Townhouse','Guesthouse','Guest suite','Bungalow','Loft'];
+const ptData = [4159,3333,1671,665,388,382,301,235];
+new Chart(document.getElementById('propChart'), {
+  type:'bar',
+  data:{ labels:ptLabels, datasets:[{ data:ptData, backgroundColor:ptColors.map(c=>c+'bb'), borderColor:ptColors, borderWidth:1, borderRadius:3 }] },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{ x:{ ticks:{color:tickColor,font:{size:9},maxRotation:30}, grid:{color:gridColor} }, y:{ ticks:{color:tickColor,font:{size:10}}, grid:{color:gridColor} } }
+  }
+});
+
+new Chart(document.getElementById('roomPriceChart'), {
+  type:'bar',
+  data:{
+    labels:['Entire home/apt','Private room','Shared room'],
+    datasets:[{ data:[265,93,75], backgroundColor:['rgba(55,138,221,0.7)','rgba(239,159,39,0.7)','rgba(216,90,48,0.7)'], borderColor:['#378ADD','#EF9F27','#D85A30'], borderWidth:1, borderRadius:3 }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{
+      x:{ ticks:{color:tickColor,font:{size:11}}, grid:{color:gridColor} },
+      y:{ ticks:{color:tickColor,font:{size:10},callback:v=>'$'+v}, grid:{color:gridColor} }
+    }
+  }
+});
+</script>
